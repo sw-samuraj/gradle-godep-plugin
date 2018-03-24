@@ -1,0 +1,3 @@
+import cz.swsamuraj.gradle.godep.GoDepPlugin
+
+apply plugin: GoDepPlugin
