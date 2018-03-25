@@ -30,17 +30,53 @@
 package cz.swsamuraj.gradle.godep
 
 import groovy.transform.CompileStatic
-import org.gradle.api.Plugin
-import org.gradle.api.Project
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.StopExecutionException
+import org.gradle.api.tasks.TaskAction
 
 @CompileStatic
-class GoDepPlugin implements Plugin<Project> {
+class PrepareWorkspaceTask extends DefaultTask {
 
-    @Override
-    void apply(Project project) {
-        project.tasks.create('clean', CleanTask)
-        project.tasks.create('prepareWorkspace', PrepareWorkspaceTask)
-        project.tasks.create('test', GoTestTask)
-        project.tasks.create('build', GoBuildTask)
+    PrepareWorkspaceTask() {
+        group = 'go & dep'
+        description = 'Checks for go and dep binaries and sets GOPATH to the project workspace.'
+    }
+
+    @TaskAction
+    void prepareWorkspace() {
+        doChecks()
+        prepareBuildDir()
+    }
+
+    void doChecks() {
+        checkGoBinary()
+        checkDepBinary()
+    }
+
+    void checkGoBinary() {
+        boolean isGoBinary = false
+
+        if (isGoBinary) {
+            logger.info('[godep] go binary not found on PATH')
+
+            throw new StopExecutionException()
+        }
+
+        logger.info("[godep] go binary found: ${isGoBinary}")
+    }
+
+    void checkDepBinary() {
+    }
+
+    void prepareBuildDir() {
+        File packageDir = new File(project.buildDir, "gopath/src")
+
+        if (!packageDir.exists()) {
+            packageDir.mkdirs()
+
+            logger.info('Go package directory has been created: {}', packageDir)
+        }
+
+        // TODO Guido: create a symlink
     }
 }

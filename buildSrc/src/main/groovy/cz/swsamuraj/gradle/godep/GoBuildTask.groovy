@@ -36,11 +36,14 @@ import org.gradle.api.tasks.TaskAction
 @CompileStatic
 class GoBuildTask extends DefaultTask {
 
-    String group = 'Go & dep'
-    String description = 'Wrapper for "go build" command'
+    GoBuildTask() {
+        group = 'go & dep'
+        description = 'Builds the Go project.'
+        dependsOn "test"
+    }
 
     @TaskAction
-    void printMessage() {
-        logger.lifecycle("Printed from the GoBuildTask")
+    void build() {
+        project.buildDir.deleteOnExit()
     }
 }

@@ -30,17 +30,20 @@
 package cz.swsamuraj.gradle.godep
 
 import groovy.transform.CompileStatic
-import org.gradle.api.Plugin
-import org.gradle.api.Project
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.TaskAction
 
 @CompileStatic
-class GoDepPlugin implements Plugin<Project> {
+class GoTestTask extends DefaultTask {
 
-    @Override
-    void apply(Project project) {
-        project.tasks.create('clean', CleanTask)
-        project.tasks.create('prepareWorkspace', PrepareWorkspaceTask)
-        project.tasks.create('test', GoTestTask)
-        project.tasks.create('build', GoBuildTask)
+    GoTestTask() {
+        group = 'go & dep'
+        description = 'Runs all the tests.'
+        dependsOn "prepareWorkspace"
+    }
+
+    @TaskAction
+    void test() {
+        logger.lifecycle("Test taks TBD")
     }
 }
