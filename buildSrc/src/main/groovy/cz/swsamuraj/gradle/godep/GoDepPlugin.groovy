@@ -38,8 +38,12 @@ class GoDepPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
+        GoDepExtension extension = project.extensions.create('godep', GoDepExtension, project)
+
         project.tasks.create('clean', CleanTask)
-        project.tasks.create('prepareWorkspace', PrepareWorkspaceTask)
+        project.tasks.create('prepareWorkspace', PrepareWorkspaceTask) {
+            it.importPath = extension.importPath
+        }
         project.tasks.create('test', GoTestTask)
         project.tasks.create('build', GoBuildTask)
     }

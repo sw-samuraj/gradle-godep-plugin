@@ -31,11 +31,17 @@ package cz.swsamuraj.gradle.godep
 
 import groovy.transform.CompileStatic
 import org.gradle.api.DefaultTask
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.StopExecutionException
 import org.gradle.api.tasks.TaskAction
 
+import java.nio.file.Files
+import java.nio.file.Path
+
 @CompileStatic
 class PrepareWorkspaceTask extends DefaultTask {
+
+    final Property<String> importPath = project.objects.property(String)
 
     PrepareWorkspaceTask() {
         group = 'go & dep'
@@ -69,14 +75,16 @@ class PrepareWorkspaceTask extends DefaultTask {
     }
 
     void prepareBuildDir() {
-        File packageDir = new File(project.buildDir, "gopath/src")
+        int lastSeparator = importPath.get().lastIndexOf(File.separator)
+        String symlinkName = importPath.get().substring(lastSeparator)
+        String pathToSymlink= importPath.get().substring(0, lastSeparator)
+        File packageDir = new File(project.buildDir, "gopath/src/" + pathToSymlink)
 
         if (!packageDir.exists()) {
             packageDir.mkdirs()
+            Files.createSymbolicLink(new File(packageDir, symlinkName).toPath(), project.projectDir.toPath())
 
             logger.info('Go package directory has been created: {}', packageDir)
         }
-
-        // TODO Guido: create a symlink
     }
 }
