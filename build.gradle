@@ -1,0 +1,7 @@
+import cz.swsamuraj.gradle.godep.GoDepPlugin
+
+apply plugin: GoDepPlugin
+
+godep {
+    importPath = 'github.com/sw-samuraj/hello'
+}
