@@ -36,7 +36,6 @@ import org.gradle.api.tasks.StopExecutionException
 import org.gradle.api.tasks.TaskAction
 
 import java.nio.file.Files
-import java.nio.file.Path
 
 @CompileStatic
 class PrepareWorkspaceTask extends DefaultTask {

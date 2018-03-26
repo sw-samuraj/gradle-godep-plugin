@@ -45,6 +45,8 @@ class GoDepPlugin implements Plugin<Project> {
             it.importPath = extension.importPath
         }
         project.tasks.create('test', GoTestTask)
-        project.tasks.create('build', GoBuildTask)
+        project.tasks.create('build', GoBuildTask) {
+            it.importPath = extension.importPath
+        }
     }
 }
