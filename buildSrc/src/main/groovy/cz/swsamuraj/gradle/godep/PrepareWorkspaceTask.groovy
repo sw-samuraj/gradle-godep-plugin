@@ -79,7 +79,7 @@ class PrepareWorkspaceTask extends DefaultTask {
         int lastSeparator = importPath.get().lastIndexOf(File.separator)
         String symlinkName = importPath.get().substring(lastSeparator + 1)
         String pathToSymlink= importPath.get().substring(0, lastSeparator)
-        File packageDir = new File(project.buildDir, "gopath/src/" + pathToSymlink)
+        File packageDir = new File(project.buildDir, "go/src/${pathToSymlink}")
 
         if (!packageDir.exists()) {
             packageDir.mkdirs()

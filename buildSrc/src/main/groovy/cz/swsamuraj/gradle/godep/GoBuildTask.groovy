@@ -49,15 +49,17 @@ class GoBuildTask extends DefaultTask {
 
     @TaskAction
     void goBuild() {
-        File packageDir = new File(project.buildDir, "gopath/src/${importPath.get()}")
+        File packageDir = new File(project.buildDir, "go/src/${importPath.get()}")
 
         logger.info('[godep] go build')
 
         project.exec(new Action<ExecSpec>() {
             @Override
             void execute(ExecSpec execSpec) {
-                execSpec.workingDir(packageDir)
-                execSpec.commandLine('go', 'build')
+                execSpec.environment('GOPATH', "${project.buildDir}/go")
+                //execSpec.setWorkingDir(packageDir)
+                //execSpec.commandLine('go', 'build')
+                execSpec.commandLine('/bin/sh', '-c', "cd ${packageDir} && go build")
             }
         })
     }
