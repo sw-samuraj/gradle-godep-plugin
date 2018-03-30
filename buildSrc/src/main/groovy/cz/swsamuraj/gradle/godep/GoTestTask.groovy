@@ -39,7 +39,7 @@ class GoTestTask extends DefaultTask {
     GoTestTask() {
         group = 'go & dep'
         description = 'Runs all the tests.'
-        dependsOn "prepareWorkspace"
+        dependsOn "dep"
     }
 
     @TaskAction

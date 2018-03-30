@@ -59,7 +59,7 @@ class GoBuildTask extends DefaultTask {
         String packageShortName = importPath.get().substring(lastSeparator + 1)
         File packageDir = new File(project.buildDir, "go/src/${importPath.get()}")
 
-        logger.info('[godep] go build')
+        logger.info("[godep] go build -o ${outDir}/${packageShortName}")
 
         project.exec(new Action<ExecSpec>() {
             @Override

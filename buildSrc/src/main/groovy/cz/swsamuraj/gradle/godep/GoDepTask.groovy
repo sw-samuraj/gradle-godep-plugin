@@ -30,26 +30,44 @@
 package cz.swsamuraj.gradle.godep
 
 import groovy.transform.CompileStatic
-import org.gradle.api.Plugin
-import org.gradle.api.Project
+import org.gradle.api.Action
+import org.gradle.api.DefaultTask
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.TaskAction
+import org.gradle.process.ExecSpec
 
 @CompileStatic
-class GoDepPlugin implements Plugin<Project> {
+class GoDepTask extends DefaultTask {
 
-    @Override
-    void apply(Project project) {
-        GoDepExtension extension = project.extensions.create('godep', GoDepExtension, project)
+    final Property<String> importPath = project.objects.property(String)
 
-        project.tasks.create('clean', CleanTask)
-        project.tasks.create('prepareWorkspace', PrepareWorkspaceTask) {
-            it.importPath = extension.importPath
+    GoDepTask() {
+        group = 'go & dep'
+        description = 'Builds the Go project.'
+        dependsOn "prepareWorkspace"
+    }
+
+    @TaskAction
+    void goDep() {
+        File gopkgToml = new File(project.projectDir, "Gopkg.toml")
+        String depCommand
+
+        if (!gopkgToml.exists()) {
+            depCommand = 'init'
+        } else {
+            depCommand = 'ensure'
         }
-        project.tasks.create('dep', GoDepTask) {
-            it.importPath = extension.importPath
-        }
-        project.tasks.create('test', GoTestTask)
-        project.tasks.create('build', GoBuildTask) {
-            it.importPath = extension.importPath
-        }
+
+        File packageDir = new File(project.buildDir, "go/src/${importPath.get()}")
+
+        logger.info("[godep] dep ${depCommand}")
+
+        project.exec(new Action<ExecSpec>() {
+            @Override
+            void execute(ExecSpec execSpec) {
+                execSpec.environment('GOPATH', "${project.buildDir}/go")
+                execSpec.commandLine('/bin/sh', '-c', "cd ${packageDir} && dep ${depCommand}")
+            }
+        })
     }
 }
