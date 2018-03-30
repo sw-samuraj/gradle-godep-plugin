@@ -1,0 +1,7 @@
+plugins {
+    id 'cz.swsamuraj.godep' version '0.1.0'
+}
+
+godep {
+    importPath = 'github.com/sw-samuraj/hello'
+}

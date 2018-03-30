@@ -1,7 +1,37 @@
-import cz.swsamuraj.gradle.godep.GoDepPlugin
+plugins {
+    id 'groovy'
+    id 'com.gradle.plugin-publish' version '0.9.10'
+}
 
-apply plugin: GoDepPlugin
+repositories {
+    mavenCentral()
+}
 
-godep {
-    importPath = 'github.com/sw-samuraj/hello'
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+}
+
+version = '0.1.0-SNAPSHOT'
+group = 'cz.swsamuraj'
+
+jar {
+    from(projectDir) {
+        include 'LICENSE'
+        into 'META-INF'
+    }
+}
+
+pluginBundle {
+    website = 'https://github.com/sw-samuraj/gradle-godep-plugin'
+    vcsUrl = 'https://github.com/sw-samuraj/gradle-godep-plugin'
+    description = 'Simple Gradle wrapper for go and dep commands.'
+    tags = ['go', 'golang', 'dep']
+
+    plugins {
+        godepPlugin {
+            id = 'cz.swsamuraj.godep'
+            displayName = 'Gradle go & dep wrapper'
+        }
+    }
 }
