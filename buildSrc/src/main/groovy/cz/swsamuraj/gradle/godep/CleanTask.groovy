@@ -44,5 +44,7 @@ class CleanTask extends DefaultTask {
     @TaskAction
     void clean() {
         project.delete project.buildDir
+
+        logger.info("[godep] ${project.buildDir.name} directory has been deleted")
     }
 }

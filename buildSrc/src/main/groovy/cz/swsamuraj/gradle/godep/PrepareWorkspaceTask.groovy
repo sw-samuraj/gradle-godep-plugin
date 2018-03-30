@@ -36,7 +36,6 @@ import org.gradle.api.tasks.StopExecutionException
 import org.gradle.api.tasks.TaskAction
 
 import java.nio.file.Files
-import java.nio.file.Path
 
 @CompileStatic
 class PrepareWorkspaceTask extends DefaultTask {
@@ -60,6 +59,7 @@ class PrepareWorkspaceTask extends DefaultTask {
     }
 
     void checkGoBinary() {
+        // TODO Guido: check for 'go' binary
         boolean isGoBinary = false
 
         if (isGoBinary) {
@@ -72,19 +72,20 @@ class PrepareWorkspaceTask extends DefaultTask {
     }
 
     void checkDepBinary() {
+        // TODO Guido: check for 'dep' binary
     }
 
     void prepareBuildDir() {
         int lastSeparator = importPath.get().lastIndexOf(File.separator)
-        String symlinkName = importPath.get().substring(lastSeparator)
+        String symlinkName = importPath.get().substring(lastSeparator + 1)
         String pathToSymlink= importPath.get().substring(0, lastSeparator)
-        File packageDir = new File(project.buildDir, "gopath/src/" + pathToSymlink)
+        File packageDir = new File(project.buildDir, "go/src/${pathToSymlink}")
 
         if (!packageDir.exists()) {
             packageDir.mkdirs()
             Files.createSymbolicLink(new File(packageDir, symlinkName).toPath(), project.projectDir.toPath())
 
-            logger.info('Go package directory has been created: {}', packageDir)
+            logger.info("[godep] go package directory has been created: ${packageDir}/${symlinkName}")
         }
     }
 }

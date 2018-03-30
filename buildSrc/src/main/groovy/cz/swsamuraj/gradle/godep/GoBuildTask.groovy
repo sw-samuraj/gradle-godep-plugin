@@ -30,11 +30,16 @@
 package cz.swsamuraj.gradle.godep
 
 import groovy.transform.CompileStatic
+import org.gradle.api.Action
 import org.gradle.api.DefaultTask
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.TaskAction
+import org.gradle.process.ExecSpec
 
 @CompileStatic
 class GoBuildTask extends DefaultTask {
+
+    final Property<String> importPath = project.objects.property(String)
 
     GoBuildTask() {
         group = 'go & dep'
@@ -43,7 +48,25 @@ class GoBuildTask extends DefaultTask {
     }
 
     @TaskAction
-    void build() {
-        project.buildDir.deleteOnExit()
+    void goBuild() {
+        File outDir = new File(project.buildDir, 'out')
+
+        if (!outDir.exists()) {
+            outDir.mkdirs()
+        }
+
+        int lastSeparator = importPath.get().lastIndexOf(File.separator)
+        String packageShortName = importPath.get().substring(lastSeparator + 1)
+        File packageDir = new File(project.buildDir, "go/src/${importPath.get()}")
+
+        logger.info('[godep] go build')
+
+        project.exec(new Action<ExecSpec>() {
+            @Override
+            void execute(ExecSpec execSpec) {
+                execSpec.environment('GOPATH', "${project.buildDir}/go")
+                execSpec.commandLine('/bin/sh', '-c', "cd ${packageDir} && go build -o ${outDir}/${packageShortName}")
+            }
+        })
     }
 }
