@@ -1,0 +1,6 @@
+*.swp
+vendor
+.gradle
+.idea
+*.iml
+build
