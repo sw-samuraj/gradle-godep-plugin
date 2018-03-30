@@ -42,7 +42,7 @@ apply plugin: "cz.swsamuraj.godep"
 The plugin requires that you have a local installation of `go` and `dep` tools and that
 those commands are available on `$PATH`.
 
-### Build life cycle ###
+### Build life-cycle ###
 
 TBD
 
