@@ -13,6 +13,7 @@ matrix:
     osx_image: xcode9.3beta
     env:
       - GOPATH=$HOME/go
+      - PATH=$PATH:$GOPATH/bin
     before_install:
       - mkdir -p $HOME/go/bin
       - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
