@@ -1,5 +1,5 @@
 language: groovy
-script: gradle clean build --daemon
+script: ./gradlew clean build --daemon
 os:
   - linux
   - osx
