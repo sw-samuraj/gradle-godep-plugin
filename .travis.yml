@@ -1,8 +1,5 @@
 language: groovy
-script:
-  - ./gradlew clean build --daemon
-  - cd example
-  - ../gradlew clean build --daemon
+script: ./gradlew clean build --daemon
 matrix:
   include:
   - os: linux
