@@ -1,10 +1,14 @@
 language: groovy
 script: gradle clean build --daemon
+os:
+  - linux
+  - osx
 jdk:
   - oraclejdk9
   - oraclejdk8
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -rf $HOME/.gradle/caches/*/plugin-resolution/
 cache:
   directories:
     - $HOME/.gradle/caches/
