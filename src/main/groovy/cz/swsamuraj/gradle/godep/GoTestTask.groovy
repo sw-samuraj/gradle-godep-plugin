@@ -29,10 +29,10 @@
  */
 package cz.swsamuraj.gradle.godep
 
-import com.sun.xml.internal.bind.v2.runtime.property.Property
 import groovy.transform.CompileStatic
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.TaskAction
 import org.gradle.process.ExecSpec
 
