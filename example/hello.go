@@ -6,8 +6,12 @@ import (
 	"net/http"
 )
 
+func Hello() string {
+	return "Hello, world!"
+}
+
 func main() {
 	r := mux.NewRouter()
 	http.Handle("/", r)
-	fmt.Println("Hello, world!")
+	fmt.Println(Hello())
 }
