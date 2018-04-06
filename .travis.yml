@@ -1,4 +1,7 @@
 language: groovy
+stages:
+  - build
+  - deploy
 script:
   - ./gradlew clean build --daemon
   - cd example
@@ -17,6 +20,23 @@ matrix:
     before_install:
       - mkdir -p $HOME/go/bin
       - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+  - stage: deploy
+    os: linux
+    jdk: oraclejdk9
+    deploy:
+      provider: script
+      script:
+        - ./gradlew clean publishPlugins
+      on:
+        tags: true
+  - stage: deploy
+    script:
+      - echo "Deploying to GitHub releases..."
+    deploy:
+      provider: releases
+      api_key: $GITHUB_OAUTH_TOKEN
+      on:
+        tags: true
 before_install:
   - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 before_cache:
