@@ -8,9 +8,13 @@ import org.gradle.api.provider.Property
 class GoDepExtension {
 
     final Property<String> importPath
+    final Property<Boolean> depOptional
 
     GoDepExtension(Project project) {
         importPath = project.objects.property(String)
         importPath.set('github.com/user/package')
+
+        depOptional = project.objects.property(Boolean)
+        depOptional.set(false)
     }
 }

@@ -32,6 +32,8 @@ package cz.swsamuraj.gradle.godep
 import groovy.transform.CompileStatic
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.ProjectEvaluationListener
+import org.gradle.api.ProjectState
 
 @CompileStatic
 class GoDepPlugin implements Plugin<Project> {
@@ -53,5 +55,18 @@ class GoDepPlugin implements Plugin<Project> {
         project.tasks.create('build', GoBuildTask) {
             it.importPath = extension.importPath
         }
+
+        project.gradle.addProjectEvaluationListener(new ProjectEvaluationListener() {
+            @Override
+            void beforeEvaluate(Project proj) {
+            }
+
+            @Override
+            void afterEvaluate(Project proj, ProjectState projectState) {
+                if (extension.depOptional.get()) {
+                    proj.tasks.getByName('dep').enabled = false
+                }
+            }
+        })
     }
 }
