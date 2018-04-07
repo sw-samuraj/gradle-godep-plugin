@@ -46,11 +46,8 @@ class GoDepTask extends DefaultTask {
         group = 'go & dep'
         description = 'Builds the Go project.'
         dependsOn "prepareWorkspace"
-
-        if (depOptional) {
-            enabled = false
-        }
     }
+
 
     @TaskAction
     void goDep() {

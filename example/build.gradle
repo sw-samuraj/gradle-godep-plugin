@@ -1,7 +1,22 @@
+/*
 plugins {
     id 'cz.swsamuraj.godep' version '0.2.1'
 }
+*/
+buildscript {
+    repositories {
+        flatDir {
+            dirs '../build/libs'
+        }
+    }
+    dependencies {
+        classpath 'gradle.plugin.cz.swsamuraj:gradle-godep-plugin:0.3.0-SNAPSHOT'
+    }
+}
+
+apply plugin: 'cz.swsamuraj.godep'
 
 godep {
     importPath = 'github.com/sw-samuraj/hello'
+    depOptional = true
 }
