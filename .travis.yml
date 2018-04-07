@@ -1,18 +1,18 @@
 language: groovy
-stages:
-  - build
-  - deploy
 script:
   - ./gradlew clean build --daemon
   - cd example
   - ../gradlew clean build --daemon
-matrix:
+jobs:
   include:
-  - os: linux
+  - stage: Build
+    os: linux
     jdk: oraclejdk8
-  - os: linux
+  - stage: Build
+    os: linux
     jdk: oraclejdk9
-  - os: osx
+  - stage: Build
+    os: osx
     osx_image: xcode9.3beta
     env:
       - GOPATH=$HOME/go
@@ -20,16 +20,18 @@ matrix:
     before_install:
       - mkdir -p $HOME/go/bin
       - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-  - stage: deploy
+  - stage: Deploy
     os: linux
     jdk: oraclejdk9
+    script:
+      - echo "Deploying to Gradle Plugin Portal..."
     deploy:
       provider: script
       script:
-        - ./gradlew clean publishPlugins
+        - ./gradlew clean publishPlugins -Dgradle.publish.key=$GRADLE_PUBLISH_KEY -Dgradle.publish.secret=$GRADLE_PUBLISH_SECRET
       on:
         tags: true
-  - stage: deploy
+  - stage: Deploy
     script:
       - echo "Deploying to GitHub releases..."
     deploy:
