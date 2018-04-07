@@ -17,7 +17,7 @@ Plugin expects that _go_ and _dep_ commands are already installed on given syste
 
 ```groovy
 plugins {
-    id "cz.swsamuraj.godep" version "0.2.1"
+    id "cz.swsamuraj.godep" version "0.3.0"
 }
 ```
 ### All Gradle versions (or local repository) ##
@@ -30,7 +30,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "gradle.plugin.cz.swsamuraj:gradle-godep-plugin:0.2.1"
+        classpath "gradle.plugin.cz.swsamuraj:gradle-godep-plugin:0.3.0"
     }
 }
 
@@ -42,40 +42,65 @@ apply plugin: "cz.swsamuraj.godep"
 The plugin requires that you have a local installation of `go` and `dep` tools and that
 those commands are available on `$PATH`.
 
+A minimal necessary configuration:
+
+```groovy
+godep {
+    importPath = 'github.com/sw-samuraj/hello'
+}
+```
+
 ### Build life-cycle ###
 
-TBD
+The plugin uses following life-cycle. You can skip certain tasks via configuration switches.
+
+1. `prepareWorkspace`
+1. `dep` can be optionally disabled (see https://github.com/sw-samuraj/gradle-godep-plugin#config-options)
+1. `test`
+1. `build`
 
 ### Tasks ###
 
 **clean**
 
-TBD
+Deletes the `build` directory.
 
 **prepareWorkspace**
 
-TBD
+Creates a "fake" `$GOPATH` directory structure inside the `build/go` directory
+with a symbolic link targeting the project directory. Every `go` command is then
+executed under this "real" `$GOPATH`.
+
+(This is just a technical detail explanation in case you are curious.) :wink:
 
 **dep**
 
-TBD
+Calls `dep init` command in case there is no `Gopkg.toml` file presented.
+Otherwise calls `dep ensure` command.
 
 **test**
 
-TBD
+Calls `go test` command.
 
 **build**
 
-TBD
+Calls `go build` command. Compiled binary file is stored in the `build/out` directory.
 
 ### Config options ###
 
 There must be a `godep` part in the `build.gradle` file which defines a mandatory parameter `importPath` which emulates
 directory structure inside standard `$GOPATH` repository.
 
+You can make certain tasks optional, or mandatory via `boolean` switch (see example below).
+
 ```groovy
 godep {
+    // A mandatory value which defines the full import path for the package.
+    // Basically, it's the directory structure under $GOPATH/src.
     importPath = 'github.com/sw-samuraj/hello'
+
+    // Skips the dep task in the build life-cycle.
+    depOptional = true
 }
 ```
 
