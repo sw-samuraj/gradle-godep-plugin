@@ -1,8 +1,7 @@
-/*
 plugins {
     id 'cz.swsamuraj.godep' version '0.2.1'
 }
-*/
+/*
 buildscript {
     repositories {
         flatDir {
@@ -15,8 +14,8 @@ buildscript {
 }
 
 apply plugin: 'cz.swsamuraj.godep'
+*/
 
 godep {
     importPath = 'github.com/sw-samuraj/hello'
-    depOptional = true
 }
