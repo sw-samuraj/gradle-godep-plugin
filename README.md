@@ -1,6 +1,7 @@
 # Gradle Golang plugin #
 
 [![Build Status](https://travis-ci.org/sw-samuraj/gradle-godep-plugin.svg?branch=master)](https://travis-ci.org/sw-samuraj/gradle-godep-plugin)
+[![Gradle Plugins Release](https://img.shields.io/github/release/sw-samuraj/gradle-godep-plugin.svg)](https://plugins.gradle.org/plugin/cz.swsamuraj.godep)
 
 A simple Gradle wrapper for _go_ and _dep_ commands, allowing to build and test
 _Golang_ programs and manage their dependencies via _dep_ tool. The project
