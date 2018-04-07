@@ -40,14 +40,12 @@ import org.gradle.process.ExecSpec
 class GoDepTask extends DefaultTask {
 
     final Property<String> importPath = project.objects.property(String)
-    final Property<Boolean> depOptional = project.objects.property(Boolean)
 
     GoDepTask() {
         group = 'go & dep'
         description = 'Builds the Go project.'
         dependsOn "prepareWorkspace"
     }
-
 
     @TaskAction
     void goDep() {
