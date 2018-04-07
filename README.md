@@ -13,10 +13,10 @@ Plugin expects that _go_ and _dep_ commands are already installed on given syste
 
 ## Contents ##
 
-1. [Applying the plugin](https://github.com/sw-samuraj/gradle-godep-plugin/tree/feature/doc-update#applying-the-plugin)
-1. [Using the plugin](https://github.com/sw-samuraj/gradle-godep-plugin/tree/feature/doc-update#using-the-plugin)
-1. [Example](https://github.com/sw-samuraj/gradle-godep-plugin/tree/feature/doc-update#example)
-1. [License](https://github.com/sw-samuraj/gradle-godep-plugin/tree/feature/doc-update#license)
+1. [Applying the plugin](https://github.com/sw-samuraj/gradle-godep-plugin#applying-the-plugin)
+1. [Using the plugin](https://github.com/sw-samuraj/gradle-godep-plugin#using-the-plugin)
+1. [Example](https://github.com/sw-samuraj/gradle-godep-plugin#example)
+1. [License](https://github.com/sw-samuraj/gradle-godep-plugin#license)
 
 ## Applying the plugin ##
 
