@@ -55,7 +55,7 @@ godep {
 The plugin uses following life-cycle. You can skip certain tasks via configuration switches.
 
 1. `prepareWorkspace`
-1. `dep` can be optionally disabled (see https://github.com/sw-samuraj/gradle-godep-plugin#config-options)
+1. `dep` can be optionally disabled (see [Config options](https://github.com/sw-samuraj/gradle-godep-plugin#config-options))
 1. `test`
 1. `build`
 
