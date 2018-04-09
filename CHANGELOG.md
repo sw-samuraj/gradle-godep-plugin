@@ -5,6 +5,11 @@
 * The `fmt` task added to the life-cycle ([#])
 * The `vet` task added to the life-cycle ([#])
 * Code refactoring ([#])
+
+## 0.3.3 ##
+
+* Fix optional `dep` task in multi-module build
+  ([#7](https://github.com/sw-samuraj/gradle-godep-plugin/pull/7))
 * CHANGELOG.md added
   ([#6](https://github.com/sw-samuraj/gradle-godep-plugin/pull/6))
 
