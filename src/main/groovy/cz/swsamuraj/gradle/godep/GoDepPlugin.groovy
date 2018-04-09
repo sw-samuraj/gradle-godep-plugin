@@ -30,10 +30,7 @@
 package cz.swsamuraj.gradle.godep
 
 import groovy.transform.CompileStatic
-import org.gradle.api.Plugin
-import org.gradle.api.Project
-import org.gradle.api.ProjectEvaluationListener
-import org.gradle.api.ProjectState
+import org.gradle.api.*
 
 @CompileStatic
 class GoDepPlugin implements Plugin<Project> {
@@ -43,15 +40,19 @@ class GoDepPlugin implements Plugin<Project> {
         GoDepExtension extension = project.extensions.create('godep', GoDepExtension, project)
 
         project.tasks.create('clean', CleanTask)
-        project.tasks.create('prepareWorkspace', PrepareWorkspaceTask) {
+
+        PrepareWorkspaceTask prepareWorkspaceTask = project.tasks.create('prepareWorkspace', PrepareWorkspaceTask) {
             it.importPath = extension.importPath
         }
+
         project.tasks.create('dep', GoDepTask) {
             it.importPath = extension.importPath
         }
+
         project.tasks.create('test', GoTestTask) {
             it.importPath = extension.importPath
         }
+
         project.tasks.create('build', GoBuildTask) {
             it.importPath = extension.importPath
         }
@@ -63,10 +64,16 @@ class GoDepPlugin implements Plugin<Project> {
 
             @Override
             void afterEvaluate(Project proj, ProjectState projectState) {
-                if (extension.depOptional.get()) {
-                    proj.tasks.getByName('dep').enabled = false
+                if (proj.tasks.findByPath('dep') != null) {
+                    if (extension.depOptional.get()) {
+                        proj.tasks.getByName('test').setDependsOn(taskList(prepareWorkspaceTask))
+                    }
                 }
             }
         })
+    }
+
+    List<Task> taskList(Task task) {
+        return Arrays.asList(task)
     }
 }
