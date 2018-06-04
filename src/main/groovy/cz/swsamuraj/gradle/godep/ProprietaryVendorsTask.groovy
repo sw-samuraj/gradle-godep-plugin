@@ -37,27 +37,36 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.process.ExecSpec
 
 @CompileStatic
-class GoTestTask extends DefaultTask {
+class ProprietaryVendorsTask extends DefaultTask {
 
     final Property<String> importPath = project.objects.property(String)
 
-    GoTestTask() {
+    ProprietaryVendorsTask() {
         group = 'go & dep'
-        description = 'Runs all the tests.'
-        dependsOn 'proprietaryVendors'
+        description = 'Builds the Go project.'
+        dependsOn 'dep'
     }
 
     @TaskAction
-    void test() {
+    void goDep() {
+        File gopkgToml = new File(project.projectDir, 'Gopkg.toml')
+        String depCommand
+
+        if (!gopkgToml.exists()) {
+            depCommand = 'init'
+        } else {
+            depCommand = 'ensure'
+        }
+
         File packageDir = new File(project.buildDir, "go/src/${importPath.get()}")
 
-        logger.info('[godep] go test')
+        logger.info("[godep] dep ${depCommand}")
 
         project.exec(new Action<ExecSpec>() {
             @Override
             void execute(ExecSpec execSpec) {
                 execSpec.environment('GOPATH', "${project.buildDir}/go")
-                execSpec.commandLine('/bin/sh', '-c', "cd ${packageDir} && go test")
+                execSpec.commandLine('/bin/sh', '-c', "cd ${packageDir} && dep ${depCommand}")
             }
         })
     }

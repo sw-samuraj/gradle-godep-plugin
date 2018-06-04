@@ -1,4 +1,4 @@
-# Gradle Golang plugin #
+# Gradle Golang plugin
 
 [![Build Status](https://travis-ci.org/sw-samuraj/gradle-godep-plugin.svg?branch=master)](https://travis-ci.org/sw-samuraj/gradle-godep-plugin)
 [![Gradle Plugins Release](https://img.shields.io/github/release/sw-samuraj/gradle-godep-plugin.svg)](https://plugins.gradle.org/plugin/cz.swsamuraj.godep)
@@ -12,23 +12,23 @@ Plugin expects that _go_ and _dep_ commands are already installed on given syste
 
 **Currently, only Unix systems are supported. Windows support can be added on demand.**
 
-## Contents ##
+## Contents
 
 1. [Applying the plugin](https://github.com/sw-samuraj/gradle-godep-plugin#applying-the-plugin)
 1. [Using the plugin](https://github.com/sw-samuraj/gradle-godep-plugin#using-the-plugin)
 1. [Example](https://github.com/sw-samuraj/gradle-godep-plugin#example)
 1. [License](https://github.com/sw-samuraj/gradle-godep-plugin#license)
 
-## Applying the plugin ##
+## Applying the plugin
 
-### Gradle 2.1+ ###
+### Gradle 2.1+
 
 ```groovy
 plugins {
     id "cz.swsamuraj.godep" version "0.4.0"
 }
 ```
-### All Gradle versions (or local repository) ##
+### All Gradle versions (or local repository)
 
 ```groovy
 buildscript {
@@ -45,7 +45,7 @@ buildscript {
 apply plugin: "cz.swsamuraj.godep"
 ```
 
-## Using the plugin ##
+## Using the plugin
 
 The plugin requires that you have a local installation of `go` and `dep` tools and that
 those commands are available on `$PATH`.
@@ -58,7 +58,7 @@ godep {
 }
 ```
 
-### Build life-cycle ###
+### Build life-cycle
 
 The plugin uses following life-cycle. You can skip certain tasks via configuration switches.
 
@@ -68,7 +68,7 @@ The plugin uses following life-cycle. You can skip certain tasks via configurati
 1. `test`
 1. `build`
 
-### Tasks ###
+### Tasks
 
 **clean**
 
@@ -109,7 +109,7 @@ Calls `go test` command.
 
 Calls `go build` command. Compiled binary file is stored in the `build/out` directory.
 
-### Config options ###
+### Config options
 
 There must be a `godep` part in the `build.gradle` file which defines a mandatory parameter `importPath` which emulates
 directory structure inside standard `$GOPATH` repository.
@@ -139,10 +139,14 @@ godep {
 }
 ```
 
-## Example ##
+## How to handle proprietary vendors
+
+TBD
+
+## Example
 
 Usage of the plugin and example project can be found in the `example` directory.
 
-## License ##
+## License
 
 The **gradle-godep-plugin** is published under [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause) license.
