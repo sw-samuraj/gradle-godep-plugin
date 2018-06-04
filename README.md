@@ -64,6 +64,7 @@ The plugin uses following life-cycle. You can skip certain tasks via configurati
 
 1. `prepareWorkspace`
 1. `dep` can be optionally disabled (see [Config options](https://github.com/sw-samuraj/gradle-godep-plugin#config-options))
+1. `proprietaryVendors` can be optionally disabled (see [Config options](https://github.com/sw-samuraj/gradle-godep-plugin#config-options))
 1. `test`
 1. `build`
 
@@ -72,6 +73,15 @@ The plugin uses following life-cycle. You can skip certain tasks via configurati
 **clean**
 
 Deletes the `build` directory.
+
+**cleanVendors**
+
+Deletes the `vendor` directory. If you want to clean both, the `build` and the `vendor` directory every time, you can
+define following task dependency:
+
+```groovy
+clean.dependsOn cleanVendors
+```
 
 **prepareWorkspace**
 
@@ -85,6 +95,11 @@ executed under this "real" `$GOPATH`.
 
 Calls `dep init` command in case there is no `Gopkg.toml` file presented.
 Otherwise calls `dep ensure` command.
+
+**proprietaryVendors**
+
+Clones all the defined import packages from non-public repositories to the `vendor/<importPath>` directory.
+Currently, it supports only clonning via _https_.
 
 **test**
 
@@ -109,6 +124,18 @@ godep {
 
     // Skips the dep task in the build life-cycle.
     depOptional = true
+
+    // Skips the proprietaryVendors task in the build life-cycle.
+    proprietaryVendorsOptional = true
+
+    // Map of import packages from non-public repositories.
+    // The item in the map has an import path as a key and a tag
+    // (or a branch) as a value.
+    proprietaryVendors = [
+            'my.private.repo/my-org/my-package':   'v0.1.0',
+            'my.private.repo/my-org/your-package': 'v0.3.2',
+            'my.private.repo/my-org/his-package':  'master'
+    ]
 }
 ```
 
