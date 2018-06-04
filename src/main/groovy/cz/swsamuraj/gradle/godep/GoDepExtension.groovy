@@ -23,6 +23,6 @@ class GoDepExtension {
         proprietaryVendorsOptional.set(false)
 
         proprietaryVendors = project.objects.property(Map)
-        proprietaryVendors.set()
+        proprietaryVendors.set(Collections.emptyMap())
     }
 }
