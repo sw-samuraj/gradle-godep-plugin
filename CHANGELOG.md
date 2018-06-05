@@ -6,7 +6,7 @@
 * The `vet` task added to the life-cycle ([#])
 * Code refactoring ([#])
 * Document _How to handle proprietary vendors_.
-  ([#11](https://github.com/sw-samuraj/gradle-godep-plugin/pull/11))
+  ([#13](https://github.com/sw-samuraj/gradle-godep-plugin/pull/13))
 
 ## 0.4.1
 

@@ -143,7 +143,7 @@ godep {
 
 Go tools currently don't support package imports which are not in public repositories,
 such as [GitHub](https://github.com), [Bitbucket](https://bitbucket.org) etc. Therefore if you have a proprietary
-repository, e.g. inside a company, you are on your own to solve all the dependency and build problems.
+repository, e.g. behind a company firewall, you are on your own to solve all the dependency and build problems.
 The `gradle-godep-plugin` took a specific approach, how to handle this situation:
 
 1. Use `dep` tool for solving of public imports, which are stored in the `vendor` directory.
@@ -151,11 +151,54 @@ The `gradle-godep-plugin` took a specific approach, how to handle this situation
 
 ### Configuration
 
-TBD
+Unfortunately, configuration of the proprietary package imports has to be done on two places:
+
+* **`build.gradle`** defines a map of package imports and their versions. These packages are clonned
+  during execution of the `proprietaryVendors` task.
+* **`Gopkg.toml`** defines the same package imports (without versions) as `ignored`, so they can be ignored
+  during execution of the `dep` task.
+* Eventually, if the proprietary package imports contain transitive dependencies on packages in public
+  repositories, those have to be defined in the `Gopkg.toml` file as `required`.
+
+Let's consider following example: we have a proprietary package `my.company.repo/cool-project/shared-package`
+which has a transitive dependency on the `github.com/coreos/etcd/clientv3` package.
+
+**`build.gradle`:**
+
+```groovy
+godep {
+    // Map of import packages from non-public repositories.
+    // The item in the map has an import path as a key and a tag
+    // (or a branch) as a value.
+    proprietaryVendors = [
+            'my.company.repo/cool-project/shared-package': 'v0.1.0'
+    ]
+}
+```
+**`Gopkg.toml`:**
+
+```toml
+# Needs to be filled only in case of transitive dependencies, otherwise can be omitted.
+required = [
+  "github.com/coreos/etcd/clientv3"
+]
+
+# It' the same package as in godep.proprietaryVendors map, only without version.
+ignored = [
+  "my.company.repo/cool-project/shared-package"
+]
+
+```
 
 ### Limitations
 
-TBD
+Currently, cloning of the proprietary vendors have these limitations:
+
+* Cloning is done via _https_ only (e.g. `git clone https://xxx`).
+* Cloned repository has to be anonymously accessible.
+
+_SSL_, or _https_ authentication could be added later, based on demand
+(please, fill an [issue](https://github.com/sw-samuraj/gradle-godep-plugin/issues)).
 
 ## Example
 
