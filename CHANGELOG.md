@@ -5,6 +5,8 @@
 * The `fmt` task added to the life-cycle ([#])
 * The `vet` task added to the life-cycle ([#])
 * Code refactoring ([#])
+* Document _How to handle proprietary vendors_.
+  ([#13](https://github.com/sw-samuraj/gradle-godep-plugin/pull/13))
 
 ## 0.4.3
 
