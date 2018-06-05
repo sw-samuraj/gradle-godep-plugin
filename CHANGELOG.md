@@ -5,7 +5,10 @@
 * The `fmt` task added to the life-cycle ([#])
 * The `vet` task added to the life-cycle ([#])
 * Code refactoring ([#])
-* Document _How to handle proprietary vendors_.
+
+## 0.4.2
+
+* Fix delete non-empty proprietary vendor directory error.
   ([#11](https://github.com/sw-samuraj/gradle-godep-plugin/pull/11))
 
 ## 0.4.1
