@@ -59,10 +59,10 @@ class ProprietaryVendorsTask extends DefaultTask {
                 parentDir.mkdirs()
             }
 
-            File packageDir = new File(project.projectDir, "vendor/${importPath.get()}")
+            File packageDir = new File(project.projectDir, "vendor/${pkg}")
 
             if (packageDir.exists()) {
-                project.delete "${project.projectDir}/vendor/${importPath.get()}"
+                project.delete packageDir
             }
 
             logger.info("[godep] git cloning ${ver} from https://${pkg}.git")

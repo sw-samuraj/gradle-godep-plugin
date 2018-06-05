@@ -1,5 +1,5 @@
 plugins {
-    id 'cz.swsamuraj.godep' version '0.4.2'
+    id 'cz.swsamuraj.godep' version '0.4.3'
 }
 /*
 buildscript {
