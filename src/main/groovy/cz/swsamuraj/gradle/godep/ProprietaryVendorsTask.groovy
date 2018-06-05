@@ -40,34 +40,40 @@ import org.gradle.process.ExecSpec
 class ProprietaryVendorsTask extends DefaultTask {
 
     final Property<String> importPath = project.objects.property(String)
+    final Property<Map> packagesToImport = project.objects.property(Map)
 
     ProprietaryVendorsTask() {
         group = 'go & dep'
-        description = 'Builds the Go project.'
+        description = 'Clones proprietary vendors packages.'
         dependsOn 'dep'
     }
 
     @TaskAction
-    void goDep() {
-        File gopkgToml = new File(project.projectDir, 'Gopkg.toml')
-        String depCommand
+    void proprietaryVendors() {
+        packagesToImport.get().forEach { String pkg, String ver ->
+            int lastSeparator = pkg.lastIndexOf(File.separator)
+            String parentPkg = pkg.substring(0, lastSeparator)
+            File parentDir = new File(project.projectDir, "vendor/${parentPkg}")
 
-        if (!gopkgToml.exists()) {
-            depCommand = 'init'
-        } else {
-            depCommand = 'ensure'
-        }
-
-        File packageDir = new File(project.buildDir, "go/src/${importPath.get()}")
-
-        logger.info("[godep] dep ${depCommand}")
-
-        project.exec(new Action<ExecSpec>() {
-            @Override
-            void execute(ExecSpec execSpec) {
-                execSpec.environment('GOPATH', "${project.buildDir}/go")
-                execSpec.commandLine('/bin/sh', '-c', "cd ${packageDir} && dep ${depCommand}")
+            if (!parentDir.exists()) {
+                parentDir.mkdirs()
             }
-        })
+
+            File packageDir = new File(project.projectDir, "vendor/${importPath.get()}")
+
+            if (packageDir.exists()) {
+                packageDir.delete()
+            }
+
+            logger.info("[godep] git cloning ${ver} from https://${pkg}.git")
+
+            project.exec(new Action<ExecSpec>() {
+                @Override
+                void execute(ExecSpec execSpec) {
+                    execSpec.workingDir(parentDir)
+                    execSpec.commandLine('git', 'clone', '--branch', ver, '--single-branch', "https://${pkg}.git")
+                }
+            })
+        }
     }
 }
