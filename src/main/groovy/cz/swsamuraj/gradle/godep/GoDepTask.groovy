@@ -44,12 +44,12 @@ class GoDepTask extends DefaultTask {
     GoDepTask() {
         group = 'go & dep'
         description = 'Builds the Go project.'
-        dependsOn "prepareWorkspace"
+        dependsOn 'prepareWorkspace'
     }
 
     @TaskAction
     void goDep() {
-        File gopkgToml = new File(project.projectDir, "Gopkg.toml")
+        File gopkgToml = new File(project.projectDir, 'Gopkg.toml')
         String depCommand
 
         if (!gopkgToml.exists()) {

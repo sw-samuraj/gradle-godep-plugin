@@ -37,28 +37,43 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.process.ExecSpec
 
 @CompileStatic
-class GoTestTask extends DefaultTask {
+class ProprietaryVendorsTask extends DefaultTask {
 
     final Property<String> importPath = project.objects.property(String)
+    final Property<Map> packagesToImport = project.objects.property(Map)
 
-    GoTestTask() {
+    ProprietaryVendorsTask() {
         group = 'go & dep'
-        description = 'Runs all the tests.'
-        dependsOn 'proprietaryVendors'
+        description = 'Clones proprietary vendors packages.'
+        dependsOn 'dep'
     }
 
     @TaskAction
-    void test() {
-        File packageDir = new File(project.buildDir, "go/src/${importPath.get()}")
+    void proprietaryVendors() {
+        packagesToImport.get().forEach { String pkg, String ver ->
+            int lastSeparator = pkg.lastIndexOf(File.separator)
+            String parentPkg = pkg.substring(0, lastSeparator)
+            File parentDir = new File(project.projectDir, "vendor/${parentPkg}")
 
-        logger.info('[godep] go test')
-
-        project.exec(new Action<ExecSpec>() {
-            @Override
-            void execute(ExecSpec execSpec) {
-                execSpec.environment('GOPATH', "${project.buildDir}/go")
-                execSpec.commandLine('/bin/sh', '-c', "cd ${packageDir} && go test")
+            if (!parentDir.exists()) {
+                parentDir.mkdirs()
             }
-        })
+
+            File packageDir = new File(project.projectDir, "vendor/${importPath.get()}")
+
+            if (packageDir.exists()) {
+                packageDir.delete()
+            }
+
+            logger.info("[godep] git cloning ${ver} from https://${pkg}.git")
+
+            project.exec(new Action<ExecSpec>() {
+                @Override
+                void execute(ExecSpec execSpec) {
+                    execSpec.workingDir(parentDir)
+                    execSpec.commandLine('git', 'clone', '--branch', ver, '--single-branch', "https://${pkg}.git")
+                }
+            })
+        }
     }
 }

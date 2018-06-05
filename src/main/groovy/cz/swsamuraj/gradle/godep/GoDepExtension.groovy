@@ -9,6 +9,8 @@ class GoDepExtension {
 
     final Property<String> importPath
     final Property<Boolean> depOptional
+    final Property<Boolean> proprietaryVendorsOptional
+    final Property<Map> proprietaryVendors
 
     GoDepExtension(Project project) {
         importPath = project.objects.property(String)
@@ -16,5 +18,11 @@ class GoDepExtension {
 
         depOptional = project.objects.property(Boolean)
         depOptional.set(false)
+
+        proprietaryVendorsOptional = project.objects.property(Boolean)
+        proprietaryVendorsOptional.set(false)
+
+        proprietaryVendors = project.objects.property(Map)
+        proprietaryVendors.set(Collections.emptyMap())
     }
 }

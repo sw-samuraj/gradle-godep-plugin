@@ -41,11 +41,17 @@ class GoDepPlugin implements Plugin<Project> {
 
         project.tasks.create('clean', CleanTask)
 
+        project.tasks.create('cleanVendors', CleanVendorsTask)
+
         PrepareWorkspaceTask prepareWorkspaceTask = project.tasks.create('prepareWorkspace', PrepareWorkspaceTask) {
             it.importPath = extension.importPath
         }
 
-        project.tasks.create('dep', GoDepTask) {
+        GoDepTask depTask = project.tasks.create('dep', GoDepTask) {
+            it.importPath = extension.importPath
+        }
+
+        project.tasks.create('proprietaryVendors', ProprietaryVendorsTask) {
             it.importPath = extension.importPath
         }
 
@@ -66,7 +72,16 @@ class GoDepPlugin implements Plugin<Project> {
             void afterEvaluate(Project proj, ProjectState projectState) {
                 if (proj.tasks.findByPath('dep') != null) {
                     if (extension.depOptional.get()) {
-                        proj.tasks.getByName('test').setDependsOn(taskList(prepareWorkspaceTask))
+                        proj.tasks.getByName('proprietaryVendors').setDependsOn(taskList(prepareWorkspaceTask))
+                    }
+                }
+                if (proj.tasks.findByPath('proprietaryVendors') != null) {
+                    if (extension.proprietaryVendorsOptional.get()) {
+                        if (extension.depOptional.get()) {
+                            proj.tasks.getByName('test').setDependsOn(taskList(prepareWorkspaceTask))
+                        } else {
+                            proj.tasks.getByName('test').setDependsOn(taskList(depTask))
+                        }
                     }
                 }
             }

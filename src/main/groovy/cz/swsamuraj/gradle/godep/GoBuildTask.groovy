@@ -44,7 +44,7 @@ class GoBuildTask extends DefaultTask {
     GoBuildTask() {
         group = 'go & dep'
         description = 'Builds the Go project.'
-        dependsOn "test"
+        dependsOn 'test'
     }
 
     @TaskAction

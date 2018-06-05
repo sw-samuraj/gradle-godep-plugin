@@ -1,4 +1,4 @@
-# Gradle Golang plugin #
+# Gradle Golang plugin
 
 [![Build Status](https://travis-ci.org/sw-samuraj/gradle-godep-plugin.svg?branch=master)](https://travis-ci.org/sw-samuraj/gradle-godep-plugin)
 [![Gradle Plugins Release](https://img.shields.io/github/release/sw-samuraj/gradle-godep-plugin.svg)](https://plugins.gradle.org/plugin/cz.swsamuraj.godep)
@@ -12,23 +12,23 @@ Plugin expects that _go_ and _dep_ commands are already installed on given syste
 
 **Currently, only Unix systems are supported. Windows support can be added on demand.**
 
-## Contents ##
+## Contents
 
 1. [Applying the plugin](https://github.com/sw-samuraj/gradle-godep-plugin#applying-the-plugin)
 1. [Using the plugin](https://github.com/sw-samuraj/gradle-godep-plugin#using-the-plugin)
 1. [Example](https://github.com/sw-samuraj/gradle-godep-plugin#example)
 1. [License](https://github.com/sw-samuraj/gradle-godep-plugin#license)
 
-## Applying the plugin ##
+## Applying the plugin
 
-### Gradle 2.1+ ###
+### Gradle 2.1+
 
 ```groovy
 plugins {
-    id "cz.swsamuraj.godep" version "0.3.3"
+    id "cz.swsamuraj.godep" version "0.4.0"
 }
 ```
-### All Gradle versions (or local repository) ##
+### All Gradle versions (or local repository)
 
 ```groovy
 buildscript {
@@ -38,14 +38,14 @@ buildscript {
         }
     }
     dependencies {
-        classpath "gradle.plugin.cz.swsamuraj:gradle-godep-plugin:0.3.3"
+        classpath "gradle.plugin.cz.swsamuraj:gradle-godep-plugin:0.4.0"
     }
 }
 
 apply plugin: "cz.swsamuraj.godep"
 ```
 
-## Using the plugin ##
+## Using the plugin
 
 The plugin requires that you have a local installation of `go` and `dep` tools and that
 those commands are available on `$PATH`.
@@ -58,20 +58,30 @@ godep {
 }
 ```
 
-### Build life-cycle ###
+### Build life-cycle
 
 The plugin uses following life-cycle. You can skip certain tasks via configuration switches.
 
 1. `prepareWorkspace`
 1. `dep` can be optionally disabled (see [Config options](https://github.com/sw-samuraj/gradle-godep-plugin#config-options))
+1. `proprietaryVendors` can be optionally disabled (see [Config options](https://github.com/sw-samuraj/gradle-godep-plugin#config-options))
 1. `test`
 1. `build`
 
-### Tasks ###
+### Tasks
 
 **clean**
 
 Deletes the `build` directory.
+
+**cleanVendors**
+
+Deletes the `vendor` directory. If you want to clean both, the `build` and the `vendor` directory every time, you can
+define following task dependency:
+
+```groovy
+clean.dependsOn cleanVendors
+```
 
 **prepareWorkspace**
 
@@ -86,6 +96,11 @@ executed under this "real" `$GOPATH`.
 Calls `dep init` command in case there is no `Gopkg.toml` file presented.
 Otherwise calls `dep ensure` command.
 
+**proprietaryVendors**
+
+Clones all the defined import packages from non-public repositories to the `vendor/<importPath>` directory.
+Currently, it supports only clonning via _https_.
+
 **test**
 
 Calls `go test` command.
@@ -94,7 +109,7 @@ Calls `go test` command.
 
 Calls `go build` command. Compiled binary file is stored in the `build/out` directory.
 
-### Config options ###
+### Config options
 
 There must be a `godep` part in the `build.gradle` file which defines a mandatory parameter `importPath` which emulates
 directory structure inside standard `$GOPATH` repository.
@@ -109,13 +124,29 @@ godep {
 
     // Skips the dep task in the build life-cycle.
     depOptional = true
+
+    // Skips the proprietaryVendors task in the build life-cycle.
+    proprietaryVendorsOptional = true
+
+    // Map of import packages from non-public repositories.
+    // The item in the map has an import path as a key and a tag
+    // (or a branch) as a value.
+    proprietaryVendors = [
+            'my.private.repo/my-org/my-package':   'v0.1.0',
+            'my.private.repo/my-org/your-package': 'v0.3.2',
+            'my.private.repo/my-org/his-package':  'master'
+    ]
 }
 ```
 
-## Example ##
+## How to handle proprietary vendors
+
+TBD
+
+## Example
 
 Usage of the plugin and example project can be found in the `example` directory.
 
-## License ##
+## License
 
 The **gradle-godep-plugin** is published under [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause) license.
