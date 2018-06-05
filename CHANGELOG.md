@@ -6,10 +6,10 @@
 * The `vet` task added to the life-cycle ([#])
 * Code refactoring ([#])
 
-## 0.4.2 (next version)
+## 0.4.2
 
-* Document _How to handle proprietary vendors_.
-  ([#])
+* Fix delete non-empty proprietary vendor directory error.
+  ([#11](https://github.com/sw-samuraj/gradle-godep-plugin/pull/11))
 
 ## 0.4.1
 
