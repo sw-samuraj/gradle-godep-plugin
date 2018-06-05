@@ -1,5 +1,5 @@
 plugins {
-    id 'cz.swsamuraj.godep' version '0.4.0'
+    id 'cz.swsamuraj.godep' version '0.4.1'
 }
 /*
 buildscript {
@@ -9,7 +9,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'gradle.plugin.cz.swsamuraj:gradle-godep-plugin:0.5.0-SNAPSHOT'
+        classpath 'gradle.plugin.cz.swsamuraj:gradle-godep-plugin:0.5.0-SNAPSTHOT'
     }
 }
 

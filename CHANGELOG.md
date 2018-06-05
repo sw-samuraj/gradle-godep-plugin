@@ -6,10 +6,15 @@
 * The `vet` task added to the life-cycle ([#])
 * Code refactoring ([#])
 
-## 0.4.1 (next version)
+## 0.4.2 (next version)
 
 * Document _How to handle proprietary vendors_.
   ([#])
+
+## 0.4.1
+
+* Fix error `proprietaryVendors` property without provider.
+  ([#10](https://github.com/sw-samuraj/gradle-godep-plugin/pull/10))
 
 ## 0.4.0
 
