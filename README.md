@@ -141,6 +141,20 @@ godep {
 
 ## How to handle proprietary vendors
 
+Go tools currently don't support package imports which are not in public repositories,
+such as [GitHub](https://github.com), [Bitbucket](https://bitbucket.org) etc. Therefore if you have a proprietary
+repository, e.g. inside a company, you are on your own to solve all the dependency and build problems.
+The `gradle-godep-plugin` took a specific approach, how to handle this situation:
+
+1. Use `dep` tool for solving of public imports, which are stored in the `vendor` directory.
+1. Clone proprietary imports via Gradle `proprietaryVendors` task to the `vendor` directory.
+
+### Configuration
+
+TBD
+
+### Limitations
+
 TBD
 
 ## Example
