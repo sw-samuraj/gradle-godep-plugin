@@ -30,35 +30,21 @@
 package cz.swsamuraj.gradle.godep
 
 import groovy.transform.CompileStatic
-import org.gradle.api.Action
 import org.gradle.api.DefaultTask
-import org.gradle.api.provider.Property
 import org.gradle.api.tasks.TaskAction
-import org.gradle.process.ExecSpec
 
 @CompileStatic
-class GoTestTask extends DefaultTask {
+class CleanVendorsTask extends DefaultTask {
 
-    final Property<String> importPath = project.objects.property(String)
-
-    GoTestTask() {
+    CleanVendorsTask() {
         group = 'go & dep'
-        description = 'Runs all the tests.'
-        dependsOn 'proprietaryVendors'
+        description = 'Deletes the vendor directory.'
     }
 
     @TaskAction
-    void test() {
-        File packageDir = new File(project.buildDir, "go/src/${importPath.get()}")
+    void clean() {
+        project.delete "${project.projectDir}/vendor"
 
-        logger.info('[godep] go test')
-
-        project.exec(new Action<ExecSpec>() {
-            @Override
-            void execute(ExecSpec execSpec) {
-                execSpec.environment('GOPATH', "${project.buildDir}/go")
-                execSpec.commandLine('/bin/sh', '-c', "cd ${packageDir} && go test")
-            }
-        })
+        logger.info("[godep] ${project.projectDir.name} directory has been deleted")
     }
 }

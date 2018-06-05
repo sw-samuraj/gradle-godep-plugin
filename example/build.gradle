@@ -1,5 +1,5 @@
 plugins {
-    id 'cz.swsamuraj.godep' version '0.3.3'
+    id 'cz.swsamuraj.godep' version '0.4.0'
 }
 /*
 buildscript {
@@ -9,7 +9,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'gradle.plugin.cz.swsamuraj:gradle-godep-plugin:0.4.0-SNAPSHOT'
+        classpath 'gradle.plugin.cz.swsamuraj:gradle-godep-plugin:0.5.0-SNAPSHOT'
     }
 }
 
@@ -18,4 +18,11 @@ apply plugin: 'cz.swsamuraj.godep'
 
 godep {
     importPath = 'github.com/sw-samuraj/hello'
+    // depOptional = true
+    // proprietaryVendorsOptional = true
+    /*
+    proprietaryVendors = [
+            'my.private.repo/my-org/my-package': 'v0.1.0'
+    ]
+    */
 }
