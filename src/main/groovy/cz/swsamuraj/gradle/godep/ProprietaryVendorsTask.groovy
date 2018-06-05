@@ -40,7 +40,7 @@ import org.gradle.process.ExecSpec
 class ProprietaryVendorsTask extends DefaultTask {
 
     final Property<String> importPath = project.objects.property(String)
-    final Property<Map> packagesToImport = project.objects.property(Map)
+    final Property<Map> proprietaryVendors = project.objects.property(Map)
 
     ProprietaryVendorsTask() {
         group = 'go & dep'
@@ -50,7 +50,7 @@ class ProprietaryVendorsTask extends DefaultTask {
 
     @TaskAction
     void proprietaryVendors() {
-        packagesToImport.get().forEach { String pkg, String ver ->
+        proprietaryVendors.get().forEach { String pkg, String ver ->
             int lastSeparator = pkg.lastIndexOf(File.separator)
             String parentPkg = pkg.substring(0, lastSeparator)
             File parentDir = new File(project.projectDir, "vendor/${parentPkg}")
