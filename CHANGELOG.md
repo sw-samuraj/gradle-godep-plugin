@@ -6,6 +6,11 @@
 * The `vet` task added to the life-cycle ([#])
 * Code refactoring ([#])
 
+## 0.4.1 (next version)
+
+* Document _How to handle proprietary vendors_.
+  ([#])
+
 ## 0.4.0
 
 * The `proprietaryVendors` task for dealing with import packages in private repositories.
