@@ -8,6 +8,16 @@
 * Document _How to handle proprietary vendors_.
   ([#13](https://github.com/sw-samuraj/gradle-godep-plugin/pull/13))
 
+## 0.4.3
+
+* Fix delete non-empty proprietary vendor directory error.
+  ([#12](https://github.com/sw-samuraj/gradle-godep-plugin/pull/12))
+
+## 0.4.2
+
+* Fix delete non-empty proprietary vendor directory error.
+  ([#11](https://github.com/sw-samuraj/gradle-godep-plugin/pull/11))
+
 ## 0.4.1
 
 * Fix error `proprietaryVendors` property without provider.
