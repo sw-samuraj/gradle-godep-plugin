@@ -53,6 +53,7 @@ class GoDepPlugin implements Plugin<Project> {
 
         project.tasks.create('proprietaryVendors', ProprietaryVendorsTask) {
             it.importPath = extension.importPath
+            it.proprietaryVendors = extension.proprietaryVendors
         }
 
         project.tasks.create('test', GoTestTask) {
