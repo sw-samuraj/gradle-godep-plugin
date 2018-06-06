@@ -8,6 +8,10 @@ _Golang_ programs and manage their dependencies via _dep_ tool. The project
 directory doesn't have to be in the standard `$GOAPTH` repository, therefore
 you can locate your project repository anywhere on filesystem.
 
+The plugin can deal with _"proprietary vendors"_ - package imports which are not in public repositories
+like [GitHub](https://github.com), or [Bitbucket](https://bitbucket.org), but are proprietary, e.g. repositories
+behind a company firewall etc. (see [Limitations](https://github.com/sw-samuraj/gradle-godep-plugin#limitations))
+
 Plugin expects that _go_ and _dep_ commands are already installed on given system and that they are available on `$PATH`.
 
 **Currently, only Unix systems are supported. Windows support can be added on demand.**
@@ -184,7 +188,7 @@ required = [
   "github.com/coreos/etcd/clientv3"
 ]
 
-# It' the same package as in godep.proprietaryVendors map, only without version.
+# It's the same package as in godep.proprietaryVendors map, only without version.
 ignored = [
   "my.company.repo/cool-project/shared-package"
 ]
