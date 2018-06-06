@@ -1,12 +1,12 @@
 # Changelog of _Gradle Golang Plugin_
 
-## 0.5.0 (next version)
+## 0.4.4
 
-* The `fmt` task added to the life-cycle ([#])
-* The `vet` task added to the life-cycle ([#])
-* Code refactoring ([#])
+* Fix lifecycle error with optional proprietary vendors.
+  ([#15](https://github.com/sw-samuraj/gradle-godep-plugin/pull/15))
 * Document _How to handle proprietary vendors_.
-  ([#13](https://github.com/sw-samuraj/gradle-godep-plugin/pull/13))
+  ([#13](https://github.com/sw-samuraj/gradle-godep-plugin/pull/13),
+   [#14](https://github.com/sw-samuraj/gradle-godep-plugin/pull/14))
 
 ## 0.4.3
 
