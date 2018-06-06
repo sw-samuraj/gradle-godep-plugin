@@ -8,6 +8,10 @@ _Golang_ programs and manage their dependencies via _dep_ tool. The project
 directory doesn't have to be in the standard `$GOAPTH` repository, therefore
 you can locate your project repository anywhere on filesystem.
 
+The plugin can deal with _"proprietary vendors"_ - package imports which are not in public repositories
+like [GitHub](https://github.com), or [Bitbucket](https://bitbucket.org), but are proprietary, e.g. repositories
+behind a company firewall etc. (see [Limitations](https://github.com/sw-samuraj/gradle-godep-plugin#limitations))
+
 Plugin expects that _go_ and _dep_ commands are already installed on given system and that they are available on `$PATH`.
 
 **Currently, only Unix systems are supported. Windows support can be added on demand.**
@@ -16,6 +20,7 @@ Plugin expects that _go_ and _dep_ commands are already installed on given syste
 
 1. [Applying the plugin](https://github.com/sw-samuraj/gradle-godep-plugin#applying-the-plugin)
 1. [Using the plugin](https://github.com/sw-samuraj/gradle-godep-plugin#using-the-plugin)
+1. [How to handle proprietary vendors](https://github.com/sw-samuraj/gradle-godep-plugin#how-to-handle-proprietary-vendors)
 1. [Example](https://github.com/sw-samuraj/gradle-godep-plugin#example)
 1. [License](https://github.com/sw-samuraj/gradle-godep-plugin#license)
 
@@ -25,7 +30,7 @@ Plugin expects that _go_ and _dep_ commands are already installed on given syste
 
 ```groovy
 plugins {
-    id "cz.swsamuraj.godep" version "0.4.3"
+    id "cz.swsamuraj.godep" version "0.4.4"
 }
 ```
 ### All Gradle versions (or local repository)
@@ -38,7 +43,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "gradle.plugin.cz.swsamuraj:gradle-godep-plugin:0.4.3"
+        classpath "gradle.plugin.cz.swsamuraj:gradle-godep-plugin:0.4.4"
     }
 }
 
@@ -141,7 +146,64 @@ godep {
 
 ## How to handle proprietary vendors
 
-TBD
+Go tools currently don't support package imports which are not in public repositories,
+such as [GitHub](https://github.com), [Bitbucket](https://bitbucket.org) etc. Therefore if you have a proprietary
+repository, e.g. behind a company firewall, you are on your own to solve all the dependency and build problems.
+The `gradle-godep-plugin` took a specific approach, how to handle this situation:
+
+1. Use `dep` tool for solving of public imports, which are stored in the `vendor` directory.
+1. Clone proprietary imports via Gradle `proprietaryVendors` task to the `vendor` directory.
+
+### Configuration
+
+Unfortunately, configuration of the proprietary package imports has to be done on two places:
+
+* **`build.gradle`** defines a map of package imports and their versions. These packages are clonned
+  during execution of the `proprietaryVendors` task.
+* **`Gopkg.toml`** defines the same package imports (without versions) as `ignored`, so they can be ignored
+  during execution of the `dep` task.
+* Eventually, if the proprietary package imports contain transitive dependencies on packages in public
+  repositories, those have to be defined in the `Gopkg.toml` file as `required`.
+
+Let's consider following example: we have a proprietary package `my.company.repo/cool-project/shared-package`
+which has a transitive dependency on the `github.com/coreos/etcd/clientv3` package.
+
+**`build.gradle`:**
+
+```groovy
+godep {
+    // Map of import packages from non-public repositories.
+    // The item in the map has an import path as a key and a tag
+    // (or a branch) as a value.
+    proprietaryVendors = [
+            'my.company.repo/cool-project/shared-package': 'v0.1.0'
+    ]
+}
+```
+**`Gopkg.toml`:**
+
+```toml
+# Needs to be filled only in case of transitive dependencies, otherwise can be omitted.
+required = [
+  "github.com/coreos/etcd/clientv3"
+]
+
+# It's the same package as in godep.proprietaryVendors map, only without version.
+ignored = [
+  "my.company.repo/cool-project/shared-package"
+]
+
+```
+
+### Limitations
+
+Currently, cloning of the proprietary vendors have these limitations:
+
+* Cloning is done via _https_ only (e.g. `git clone https://xxx`).
+* Cloned repository has to be anonymously accessible.
+
+_SSL_, or _https_ authentication could be added later, based on demand
+(please, fill an [issue](https://github.com/sw-samuraj/gradle-godep-plugin/issues)).
 
 ## Example
 
