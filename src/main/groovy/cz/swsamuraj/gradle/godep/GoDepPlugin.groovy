@@ -73,7 +73,11 @@ class GoDepPlugin implements Plugin<Project> {
             void afterEvaluate(Project proj, ProjectState projectState) {
                 if (proj.tasks.findByPath('dep') != null) {
                     if (extension.depOptional.get()) {
-                        proj.tasks.getByName('proprietaryVendors').setDependsOn(taskList(prepareWorkspaceTask))
+                        if (extension.proprietaryVendorsOptional.get()) {
+                            proj.tasks.getByName('test').setDependsOn(taskList(prepareWorkspaceTask))
+                        } else {
+                            proj.tasks.getByName('proprietaryVendors').setDependsOn(taskList(prepareWorkspaceTask))
+                        }
                     }
                 }
                 if (proj.tasks.findByPath('proprietaryVendors') != null) {
