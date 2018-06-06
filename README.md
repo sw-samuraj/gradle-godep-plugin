@@ -30,7 +30,7 @@ Plugin expects that _go_ and _dep_ commands are already installed on given syste
 
 ```groovy
 plugins {
-    id "cz.swsamuraj.godep" version "0.4.3"
+    id "cz.swsamuraj.godep" version "0.4.4"
 }
 ```
 ### All Gradle versions (or local repository)
@@ -43,7 +43,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "gradle.plugin.cz.swsamuraj:gradle-godep-plugin:0.4.3"
+        classpath "gradle.plugin.cz.swsamuraj:gradle-godep-plugin:0.4.4"
     }
 }
 
