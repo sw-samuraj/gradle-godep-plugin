@@ -37,6 +37,8 @@ class GoDepPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
+        def isGoModule = isGoModule(project)
+
         GoDepExtension extension = project.extensions.create('godep', GoDepExtension, project)
 
         project.tasks.create('clean', CleanTask)
@@ -91,6 +93,10 @@ class GoDepPlugin implements Plugin<Project> {
                 }
             }
         })
+    }
+
+    boolean isGoModule(Project project) {
+        project.file("go.mod").exists()
     }
 
     List<Task> taskList(Task task) {

@@ -4,6 +4,7 @@ jobs:
   - stage: Build plugin
     os: linux
     jdk: oraclejdk9
+    go: 1.11.x
     script:
       - ./gradlew clean build
   - stage: Deploy
