@@ -40,6 +40,7 @@ import org.gradle.process.ExecSpec
 class GoBuildTask extends DefaultTask {
 
     final Property<String> importPath = project.objects.property(String)
+    boolean isGoModule
 
     GoBuildTask() {
         group = 'go & dep'
@@ -55,18 +56,47 @@ class GoBuildTask extends DefaultTask {
             outDir.mkdirs()
         }
 
-        int lastSeparator = importPath.get().lastIndexOf(File.separator)
-        String packageShortName = importPath.get().substring(lastSeparator + 1)
-        File packageDir = new File(project.buildDir, "go/src/${importPath.get()}")
+        if (isGoModule) {
+            String outputFile = "${outDir}/${moduleName()}"
 
-        logger.info("[godep] go build -o ${outDir}/${packageShortName}")
+            logger.info("[godep] go build -o ${outputFile}")
 
-        project.exec(new Action<ExecSpec>() {
-            @Override
-            void execute(ExecSpec execSpec) {
-                execSpec.environment('GOPATH', "${project.buildDir}/go")
-                execSpec.commandLine('/bin/sh', '-c', "cd ${packageDir} && go build -o ${outDir}/${packageShortName}")
+            project.exec(new Action<ExecSpec>() {
+                @Override
+                void execute(ExecSpec execSpec) {
+                    execSpec.environment('GO111MODULE', 'on')
+                    execSpec.commandLine('go', 'build', '-o', outputFile)
+                }
+            })
+        } else {
+            int lastSeparator = importPath.get().lastIndexOf(File.separator)
+            String packageShortName = importPath.get().substring(lastSeparator + 1)
+            File packageDir = new File(project.buildDir, "go/src/${importPath.get()}")
+
+            logger.info("[godep] go build -o ${outDir}/${packageShortName}")
+
+            project.exec(new Action<ExecSpec>() {
+                @Override
+                void execute(ExecSpec execSpec) {
+                    execSpec.environment('GOPATH', "${project.buildDir}/go")
+                    execSpec.commandLine('/bin/sh', '-c', "cd ${packageDir} && go build -o ${outDir}/${packageShortName}")
+                }
+            })
+        }
+    }
+
+    String moduleName() {
+        String moduleName
+
+        project.file("go.mod").readLines().any { line ->
+            if (line.startsWith("module")) {
+                int lastSeparator = line.lastIndexOf("/")
+
+                moduleName = line.substring(lastSeparator + 1)
+                return
             }
-        })
+        }
+
+        moduleName
     }
 }

@@ -37,60 +37,74 @@ class GoDepPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
+        boolean isGoModule = isGoModule(project)
+
         GoDepExtension extension = project.extensions.create('godep', GoDepExtension, project)
 
         project.tasks.create('clean', CleanTask)
 
-        project.tasks.create('cleanVendors', CleanVendorsTask)
-
-        PrepareWorkspaceTask prepareWorkspaceTask = project.tasks.create('prepareWorkspace', PrepareWorkspaceTask) {
-            it.importPath = extension.importPath
-        }
-
-        GoDepTask depTask = project.tasks.create('dep', GoDepTask) {
-            it.importPath = extension.importPath
-        }
-
-        project.tasks.create('proprietaryVendors', ProprietaryVendorsTask) {
-            it.importPath = extension.importPath
-            it.proprietaryVendors = extension.proprietaryVendors
-        }
-
         project.tasks.create('test', GoTestTask) {
             it.importPath = extension.importPath
+            it.isGoModule = isGoModule
+
+            if (isGoModule) {
+                it.setDependsOn(Collections.emptyList())
+            }
         }
 
         project.tasks.create('build', GoBuildTask) {
             it.importPath = extension.importPath
+            it.isGoModule = isGoModule
         }
 
-        project.gradle.addProjectEvaluationListener(new ProjectEvaluationListener() {
-            @Override
-            void beforeEvaluate(Project proj) {
+        if (!isGoModule) {
+            project.tasks.create('cleanVendors', CleanVendorsTask)
+
+            PrepareWorkspaceTask prepareWorkspaceTask = project.tasks.create('prepareWorkspace', PrepareWorkspaceTask) {
+                it.importPath = extension.importPath
             }
 
-            @Override
-            void afterEvaluate(Project proj, ProjectState projectState) {
-                if (proj.tasks.findByPath('dep') != null) {
-                    if (extension.depOptional.get()) {
-                        if (extension.proprietaryVendorsOptional.get()) {
-                            proj.tasks.getByName('test').setDependsOn(taskList(prepareWorkspaceTask))
-                        } else {
-                            proj.tasks.getByName('proprietaryVendors').setDependsOn(taskList(prepareWorkspaceTask))
-                        }
-                    }
-                }
-                if (proj.tasks.findByPath('proprietaryVendors') != null) {
-                    if (extension.proprietaryVendorsOptional.get()) {
-                        if (extension.depOptional.get()) {
-                            proj.tasks.getByName('test').setDependsOn(taskList(prepareWorkspaceTask))
-                        } else {
-                            proj.tasks.getByName('test').setDependsOn(taskList(depTask))
-                        }
-                    }
-                }
+            GoDepTask depTask = project.tasks.create('dep', GoDepTask) {
+                it.importPath = extension.importPath
             }
-        })
+
+            project.tasks.create('proprietaryVendors', ProprietaryVendorsTask) {
+                it.importPath = extension.importPath
+                it.proprietaryVendors = extension.proprietaryVendors
+            }
+
+            project.gradle.addProjectEvaluationListener(new ProjectEvaluationListener() {
+                @Override
+                void beforeEvaluate(Project proj) {
+                }
+
+                @Override
+                void afterEvaluate(Project proj, ProjectState projectState) {
+                    if (proj.tasks.findByPath('dep') != null) {
+                        if (extension.depOptional.get()) {
+                            if (extension.proprietaryVendorsOptional.get()) {
+                                proj.tasks.getByName('test').setDependsOn(taskList(prepareWorkspaceTask))
+                            } else {
+                                proj.tasks.getByName('proprietaryVendors').setDependsOn(taskList(prepareWorkspaceTask))
+                            }
+                        }
+                    }
+                    if (proj.tasks.findByPath('proprietaryVendors') != null) {
+                        if (extension.proprietaryVendorsOptional.get()) {
+                            if (extension.depOptional.get()) {
+                                proj.tasks.getByName('test').setDependsOn(taskList(prepareWorkspaceTask))
+                            } else {
+                                proj.tasks.getByName('test').setDependsOn(taskList(depTask))
+                            }
+                        }
+                    }
+                }
+            })
+        }
+    }
+
+    boolean isGoModule(Project project) {
+        project.file("go.mod").exists()
     }
 
     List<Task> taskList(Task task) {

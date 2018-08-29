@@ -9,12 +9,12 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'gradle.plugin.cz.swsamuraj:gradle-godep-plugin:0.5.0-SNAPSHOT'
+        classpath 'gradle.plugin.cz.swsamuraj:gradle-godep-plugin:0.5.0'
     }
 }
+*/
 
 apply plugin: 'cz.swsamuraj.godep'
-*/
 
 godep {
     importPath = 'github.com/sw-samuraj/hello'

@@ -1,6 +1,6 @@
 plugins {
     id 'groovy'
-    id 'com.gradle.plugin-publish' version '0.9.10'
+    id 'com.gradle.plugin-publish' version '0.10.0'
 }
 
 repositories {
@@ -12,7 +12,7 @@ dependencies {
     compile localGroovy()
 }
 
-version = '0.4.4'
+version = '0.5.0'
 group = 'cz.swsamuraj'
 
 jar {
