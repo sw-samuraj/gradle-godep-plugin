@@ -40,6 +40,7 @@ import org.gradle.process.ExecSpec
 class GoTestTask extends DefaultTask {
 
     final Property<String> importPath = project.objects.property(String)
+    boolean isGoModule
 
     GoTestTask() {
         group = 'go & dep'
@@ -49,16 +50,26 @@ class GoTestTask extends DefaultTask {
 
     @TaskAction
     void test() {
-        File packageDir = new File(project.buildDir, "go/src/${importPath.get()}")
-
         logger.info('[godep] go test')
 
-        project.exec(new Action<ExecSpec>() {
-            @Override
-            void execute(ExecSpec execSpec) {
-                execSpec.environment('GOPATH', "${project.buildDir}/go")
-                execSpec.commandLine('/bin/sh', '-c', "cd ${packageDir} && go test")
-            }
-        })
+        if (isGoModule) {
+            project.exec(new Action<ExecSpec>() {
+                @Override
+                void execute(ExecSpec execSpec) {
+                    execSpec.environment('GO111MODULE', 'on')
+                    execSpec.commandLine('go', 'test')
+                }
+            })
+        } else {
+            File packageDir = new File(project.buildDir, "go/src/${importPath.get()}")
+
+            project.exec(new Action<ExecSpec>() {
+                @Override
+                void execute(ExecSpec execSpec) {
+                    execSpec.environment('GOPATH', "${project.buildDir}/go")
+                    execSpec.commandLine('/bin/sh', '-c', "cd ${packageDir} && go test")
+                }
+            })
+        }
     }
 }

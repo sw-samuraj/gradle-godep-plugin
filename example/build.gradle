@@ -16,13 +16,13 @@ buildscript {
 
 apply plugin: 'cz.swsamuraj.godep'
 
-/*
 godep {
-importPath = 'github.com/sw-samuraj/hello'
-// depOptional = true
-// proprietaryVendorsOptional = true
-proprietaryVendors = [
-        'my.private.repo/my-org/my-package': 'v0.1.0'
-]
+    importPath = 'github.com/sw-samuraj/hello'
+    // depOptional = true
+    // proprietaryVendorsOptional = true
+    /*
+    proprietaryVendors = [
+            'my.private.repo/my-org/my-package': 'v0.1.0'
+    ]
+    */
 }
-*/
