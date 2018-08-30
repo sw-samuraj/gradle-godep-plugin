@@ -1,8 +1,7 @@
-/*
 plugins {
     id 'cz.swsamuraj.godep' version '0.6.0'
 }
-*/
+/*
 buildscript {
     repositories {
         flatDir {
@@ -15,7 +14,12 @@ buildscript {
 }
 
 apply plugin: 'cz.swsamuraj.godep'
+*/
 
-godep {
-     disableGoModule = true
+allprojects {
+    apply plugin: 'cz.swsamuraj.godep'
+
+    godep {
+        disableGoModule = true
+    }
 }

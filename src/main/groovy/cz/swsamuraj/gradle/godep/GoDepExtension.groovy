@@ -8,6 +8,7 @@ import org.gradle.api.provider.Property
 class GoDepExtension {
 
     final Property<String> importPath
+    final Property<Boolean> disableGoModule
     final Property<Boolean> depOptional
     final Property<Boolean> proprietaryVendorsOptional
     final Property<Map> proprietaryVendors
@@ -15,6 +16,9 @@ class GoDepExtension {
     GoDepExtension(Project project) {
         importPath = project.objects.property(String)
         importPath.set('github.com/user/package')
+
+        disableGoModule = project.objects.property(Boolean)
+        disableGoModule.set(false)
 
         depOptional = project.objects.property(Boolean)
         depOptional.set(false)

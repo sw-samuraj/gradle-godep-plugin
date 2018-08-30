@@ -12,9 +12,9 @@ buildscript {
         classpath 'gradle.plugin.cz.swsamuraj:gradle-godep-plugin:0.6.0'
     }
 }
-*/
 
 apply plugin: 'cz.swsamuraj.godep'
+*/
 
 godep {
     importPath = 'github.com/sw-samuraj/hello'
