@@ -1,5 +1,15 @@
 # Changelog of _Gradle Golang Plugin_
 
+## 0.6.0
+
+* Option for disabling of Go modules.
+  ([#17](https://github.com/sw-samuraj/gradle-godep-plugin/pull/17))
+
+## 0.5.0
+
+* Go modules support.
+  ([#16](https://github.com/sw-samuraj/gradle-godep-plugin/pull/16))
+
 ## 0.4.4
 
 * Fix lifecycle error with optional proprietary vendors.
