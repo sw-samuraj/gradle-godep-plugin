@@ -1,7 +1,6 @@
 *.swp
-vendor
+examples/go-and-dep/vendor/
 .gradle
 .idea
 *.iml
 build
-example/Gopkg*
