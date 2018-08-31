@@ -27,14 +27,18 @@ jobs:
     os: linux
     jdk: oraclejdk8
     script:
-      - cd example
-      - ../gradlew clean build
+      - cd examples/go-and-dep
+      - ../../gradlew clean build
+      - cd ../go-and-disabled-modules
+      - ../../gradlew clean build
   - stage: Build example
     os: linux
     jdk: oraclejdk9
     script:
-      - cd example
-      - ../gradlew clean build
+      - cd examples/go-and-dep
+      - ../../gradlew clean build
+      - cd ../go-and-disabled-modules
+      - ../../gradlew clean build
   - stage: Build example
     os: osx
     osx_image: xcode9.3beta
@@ -42,8 +46,10 @@ jobs:
       - GOPATH=$HOME/go
       - PATH=$PATH:$GOPATH/bin
     script:
-      - cd example
-      - ../gradlew clean build
+      - cd examples/go-and-dep
+      - ../../gradlew clean build
+      - cd ../go-and-disabled-modules
+      - ../../gradlew clean build
     before_install:
       - mkdir -p $HOME/go/bin
       - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
