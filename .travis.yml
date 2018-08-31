@@ -29,15 +29,11 @@ jobs:
     script:
       - cd examples/go-and-dep
       - ../../gradlew clean build
-      - cd ../go-and-disabled-modules
-      - ../../gradlew clean build
   - stage: Build example
     os: linux
     jdk: oraclejdk9
     script:
       - cd examples/go-and-dep
-      - ../../gradlew clean build
-      - cd ../go-and-disabled-modules
       - ../../gradlew clean build
   - stage: Build example
     os: osx
@@ -47,8 +43,6 @@ jobs:
       - PATH=$PATH:$GOPATH/bin
     script:
       - cd examples/go-and-dep
-      - ../../gradlew clean build
-      - cd ../go-and-disabled-modules
       - ../../gradlew clean build
     before_install:
       - mkdir -p $HOME/go/bin
