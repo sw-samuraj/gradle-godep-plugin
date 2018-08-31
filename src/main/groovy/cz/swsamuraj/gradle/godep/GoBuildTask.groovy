@@ -40,6 +40,7 @@ import org.gradle.process.ExecSpec
 class GoBuildTask extends DefaultTask {
 
     final Property<String> importPath = project.objects.property(String)
+    final Property<Boolean> disableGoModule = project.objects.property(Boolean)
     boolean isGoModule
 
     GoBuildTask() {
@@ -64,7 +65,11 @@ class GoBuildTask extends DefaultTask {
             project.exec(new Action<ExecSpec>() {
                 @Override
                 void execute(ExecSpec execSpec) {
-                    execSpec.environment('GO111MODULE', 'on')
+                    if (disableGoModule.get()) {
+                        execSpec.environment('GO111MODULE', 'off')
+                    } else {
+                        execSpec.environment('GO111MODULE', 'on')
+                    }
                     execSpec.commandLine('go', 'build', '-o', outputFile)
                 }
             })

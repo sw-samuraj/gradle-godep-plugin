@@ -45,6 +45,7 @@ class GoDepPlugin implements Plugin<Project> {
 
         project.tasks.create('test', GoTestTask) {
             it.importPath = extension.importPath
+            it.disableGoModule = extension.disableGoModule
             it.isGoModule = isGoModule
 
             if (isGoModule) {
@@ -54,6 +55,7 @@ class GoDepPlugin implements Plugin<Project> {
 
         project.tasks.create('build', GoBuildTask) {
             it.importPath = extension.importPath
+            it.disableGoModule = extension.disableGoModule
             it.isGoModule = isGoModule
         }
 
