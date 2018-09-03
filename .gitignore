@@ -1,6 +1,8 @@
 *.swp
 examples/go-and-dep/vendor/
+examples/go-and-modules/vendor/
 .gradle
 .idea
 *.iml
 build
+go.sum
