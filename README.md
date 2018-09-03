@@ -29,8 +29,12 @@ behind a company firewall etc. (see [Limitations](https://github.com/sw-samuraj/
 
 1. [Applying the plugin](https://github.com/sw-samuraj/gradle-godep-plugin#applying-the-plugin)
 1. [Using the plugin](https://github.com/sw-samuraj/gradle-godep-plugin#using-the-plugin)
+    1. [Go modules](https://github.com/sw-samuraj/gradle-godep-plugin#go-modules)
+    1. [Go + dep](https://github.com/sw-samuraj/gradle-godep-plugin#go--dep)
+    1. [Go + manually managed vendors](https://github.com/sw-samuraj/gradle-godep-plugin#go--manually-managed-vendors)
+1. [Tasks](https://github.com/sw-samuraj/gradle-godep-plugin#tasks)
 1. [How to handle proprietary vendors](https://github.com/sw-samuraj/gradle-godep-plugin#how-to-handle-proprietary-vendors)
-1. [Example](https://github.com/sw-samuraj/gradle-godep-plugin#example)
+1. [Examples](https://github.com/sw-samuraj/gradle-godep-plugin#examples)
 1. [License](https://github.com/sw-samuraj/gradle-godep-plugin#license)
 
 ## Applying the plugin
@@ -196,7 +200,9 @@ Calls `go test` command.
 
 Calls `go build` command. Compiled binary file is stored in the `build/out` directory.
 
-## How to handle proprietary vendors (applies for dep approach only)
+## How to handle proprietary vendors
+
+**Applies for dep approach only.**
 
 Go tools currently don't support package imports which are not in public repositories,
 such as [GitHub](https://github.com), [Bitbucket](https://bitbucket.org) etc. Therefore if you have a proprietary
