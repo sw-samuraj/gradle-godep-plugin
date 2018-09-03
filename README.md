@@ -3,18 +3,27 @@
 [![Build Status](https://travis-ci.org/sw-samuraj/gradle-godep-plugin.svg?branch=master)](https://travis-ci.org/sw-samuraj/gradle-godep-plugin)
 [![Gradle Plugins Release](https://img.shields.io/github/release/sw-samuraj/gradle-godep-plugin.svg)](https://plugins.gradle.org/plugin/cz.swsamuraj.godep)
 
-A simple Gradle wrapper for _go_ and _dep_ commands, allowing to build and test
-_Golang_ programs and manage their dependencies via _dep_ tool. The project
+A simple Gradle wrapper for _go_ commands, allowing to build and test
+_Golang_ programs and manage their dependencies either via _Go modules_, or via _dep_ tool. The project
 directory doesn't have to be in the standard `$GOAPTH` repository, therefore
 you can locate your project repository anywhere on filesystem.
 
-The plugin can deal with _"proprietary vendors"_ - package imports which are not in public repositories
+For usage of _Go modules_ you have to have installed at least **go1.11**.
+
+The plugin supports 3 ways how to deal with external dependencies:
+
+1. _Go modules_
+1. _go_ + _dep_ + optional management of _"proprietary vendors"_
+1. _go_ + manually/externally managed _vendors_
+
+Plugin expects that _go_ and _dep_ (if used) commands are already installed on given system and that they are available on `$PATH`.
+
+In case of _dep_ usage:
+
+* Only Unix systems are supported. (Windows support can be added on demand.)
+* The plugin can deal with _"proprietary vendors"_ - package imports which are not in public repositories
 like [GitHub](https://github.com), or [Bitbucket](https://bitbucket.org), but are proprietary, e.g. repositories
 behind a company firewall etc. (see [Limitations](https://github.com/sw-samuraj/gradle-godep-plugin#limitations))
-
-Plugin expects that _go_ and _dep_ commands are already installed on given system and that they are available on `$PATH`.
-
-**Currently, only Unix systems are supported. Windows support can be added on demand.**
 
 ## Contents
 
@@ -30,7 +39,7 @@ Plugin expects that _go_ and _dep_ commands are already installed on given syste
 
 ```groovy
 plugins {
-    id "cz.swsamuraj.godep" version "0.4.4"
+    id "cz.swsamuraj.godep" version "0.6.1"
 }
 ```
 ### All Gradle versions (or local repository)
@@ -43,7 +52,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "gradle.plugin.cz.swsamuraj:gradle-godep-plugin:0.4.4"
+        classpath "gradle.plugin.cz.swsamuraj:gradle-godep-plugin:0.6.1"
     }
 }
 
@@ -52,8 +61,26 @@ apply plugin: "cz.swsamuraj.godep"
 
 ## Using the plugin
 
+### Go modules
+
+The plugin expects that you have a local installation of `go1.11` and that
+this command is available on `$PATH`. Further, there should be:
+ 
+* a `go.mod` file in your project directory, which contains **at least** the `module` statement.
+
+No configuration is needed.
+
+#### Build life-cycle
+
+The plugin has following life-cycle.
+
+1. `test`
+1. `build`
+
+### Go + dep
+
 The plugin requires that you have a local installation of `go` and `dep` tools and that
-those commands are available on `$PATH`.
+those commands are available on `$PATH`. There shouldn't be any `go.mod` file in the project.
 
 A minimal necessary configuration:
 
@@ -63,7 +90,7 @@ godep {
 }
 ```
 
-### Build life-cycle
+#### Build life-cycle
 
 The plugin uses following life-cycle. You can skip certain tasks via configuration switches.
 
@@ -73,48 +100,7 @@ The plugin uses following life-cycle. You can skip certain tasks via configurati
 1. `test`
 1. `build`
 
-### Tasks
-
-**clean**
-
-Deletes the `build` directory.
-
-**cleanVendors**
-
-Deletes the `vendor` directory. If you want to clean both, the `build` and the `vendor` directory every time, you can
-define following task dependency:
-
-```groovy
-clean.dependsOn cleanVendors
-```
-
-**prepareWorkspace**
-
-Creates a "fake" `$GOPATH` directory structure inside the `build/go` directory
-with a symbolic link targeting the project directory. Every `go` command is then
-executed under this "real" `$GOPATH`.
-
-(This is just a technical detail explanation in case you are curious.) :wink:
-
-**dep**
-
-Calls `dep init` command in case there is no `Gopkg.toml` file presented.
-Otherwise calls `dep ensure` command.
-
-**proprietaryVendors**
-
-Clones all the defined import packages from non-public repositories to the `vendor/<importPath>` directory.
-Currently, it supports only clonning via _https_.
-
-**test**
-
-Calls `go test` command.
-
-**build**
-
-Calls `go build` command. Compiled binary file is stored in the `build/out` directory.
-
-### Config options
+#### Config options
 
 There must be a `godep` part in the `build.gradle` file which defines a mandatory parameter `importPath` which emulates
 directory structure inside standard `$GOPATH` repository.
@@ -144,7 +130,73 @@ godep {
 }
 ```
 
-## How to handle proprietary vendors
+### Go + manually managed vendors
+
+The plugin expects that you have a local installation of `go1.11` and that
+this command is available on `$PATH`. Further, there should be:
+
+* a `go.mod` file in your project directory, which contains **only** the `module` statement
+* and a `vendor` directory containing all needed dependencies.
+
+In this case, the dependencies are not managed neither by plugin, nor _go_  itself.
+
+A minimal necessary configuration:
+
+```groovy
+godep {
+    disableGoModule = true
+}
+```
+
+#### Build life-cycle
+
+The plugin has following life-cycle.
+
+1. `test`
+1. `build`
+
+## Tasks
+
+### clean
+
+Deletes the `build` directory.
+
+### cleanVendors
+
+Deletes the `vendor` directory. If you want to clean both, the `build` and the `vendor` directory every time, you can
+define following task dependency:
+
+```groovy
+clean.dependsOn cleanVendors
+```
+
+### prepareWorkspace
+
+Creates a "fake" `$GOPATH` directory structure inside the `build/go` directory
+with a symbolic link targeting the project directory. Every `go` command is then
+executed under this "real" `$GOPATH`.
+
+(This is just a technical detail explanation in case you are curious.) :wink:
+
+### dep
+
+Calls `dep init` command in case there is no `Gopkg.toml` file presented.
+Otherwise calls `dep ensure` command.
+
+### proprietaryVendors
+
+Clones all the defined import packages from non-public repositories to the `vendor/<importPath>` directory.
+Currently, it supports only clonning via _https_.
+
+### test
+
+Calls `go test` command.
+
+### build
+
+Calls `go build` command. Compiled binary file is stored in the `build/out` directory.
+
+## How to handle proprietary vendors (applies for dep approach only)
 
 Go tools currently don't support package imports which are not in public repositories,
 such as [GitHub](https://github.com), [Bitbucket](https://bitbucket.org) etc. Therefore if you have a proprietary
@@ -205,9 +257,13 @@ Currently, cloning of the proprietary vendors have these limitations:
 _SSL_, or _https_ authentication could be added later, based on demand
 (please, fill an [issue](https://github.com/sw-samuraj/gradle-godep-plugin/issues)).
 
-## Example
+## Examples
 
-Usage of the plugin and example project can be found in the `example` directory.
+Usage of the plugin and example projects can be found in the `examples` directory:
+
+* `go-and-modules` shows configuration for plain _Go modules_ support.
+* `go-and-dep` shows configuration for _go_ + _dep_ support (including _"proprietary vendors"_).
+* `go-and-disabled-modules` shows configuration for _Go_ build with manually managed _vendors_.
 
 ## License
 

@@ -3,6 +3,8 @@
 ## 0.6.1
 
 * Documentation for Go modules support.
+  ([#19](https://github.com/sw-samuraj/gradle-godep-plugin/pull/19))
+* An example of Go modules build.
   ([#18](https://github.com/sw-samuraj/gradle-godep-plugin/pull/18))
 
 ## 0.6.0
