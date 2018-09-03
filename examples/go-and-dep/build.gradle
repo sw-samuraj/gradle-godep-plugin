@@ -9,7 +9,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'gradle.plugin.cz.swsamuraj:gradle-godep-plugin:0.6.0'
+        classpath 'gradle.plugin.cz.swsamuraj:gradle-godep-plugin:0.6.1'
     }
 }
 
