@@ -1,5 +1,10 @@
 # Changelog of _Gradle Golang Plugin_
 
+## 0.6.1
+
+* Documentation for Go modules support.
+  ([#18](https://github.com/sw-samuraj/gradle-godep-plugin/pull/18))
+
 ## 0.6.0
 
 * Option for disabling of Go modules.
