@@ -72,7 +72,7 @@ class GoTestTask extends DefaultTask {
                 @Override
                 void execute(ExecSpec execSpec) {
                     execSpec.environment('GOPATH', "${project.buildDir}/go")
-                    execSpec.commandLine('/bin/sh', '-c', "cd ${packageDir} && go test")
+                    execSpec.commandLine('/bin/sh', '-c', "cd ${packageDir} && go test -v -cover ./...")
                 }
             })
         }
