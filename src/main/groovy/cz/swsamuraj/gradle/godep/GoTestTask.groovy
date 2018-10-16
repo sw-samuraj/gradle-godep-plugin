@@ -62,7 +62,7 @@ class GoTestTask extends DefaultTask {
                     } else {
                         execSpec.environment('GO111MODULE', 'on')
                     }
-                    execSpec.commandLine('go', 'test')
+                    execSpec.commandLine('go', 'test', '-v', '-cover', './...')
                 }
             })
         } else {
