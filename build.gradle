@@ -12,7 +12,7 @@ dependencies {
     compile localGroovy()
 }
 
-version = '0.6.2'
+version = '0.6.3'
 group = 'cz.swsamuraj'
 
 jar {
